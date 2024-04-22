@@ -1,0 +1,7 @@
+@use "../sass/abstracts/mixins";
+
+.row {
+  display: flex;
+  background-color: limegreen;
+  @include mixins.generateJustifyContentClasses();
+}
