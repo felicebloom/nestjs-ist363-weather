@@ -75,3 +75,15 @@
     }
   }
 }
+
+@mixin generateFontSizeClasses() {
+  $sizes: xs, sm, md, lg, xl;
+
+  @each $size, $value in $sizes {
+    @include breakpoint(#{$size}) {
+      &.font_size--#{$size} {
+        font-size: 2rem;
+      }
+    }
+  }
+}

@@ -6,12 +6,12 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 
 // custom components
-import Button from "..//components/Button";
 import Col from "..//components/Col";
 import Container from "..//components/Container";
 import List from "../components/List";
 import Row from "..//components/Row";
 import Tabs from "../components/Tabs";
+import Temp from "../components/Temp";
 
 import { getGeoLocation, getPeople, getWeatherDataByLatLon } from "../lib/api";
 
@@ -78,7 +78,7 @@ const Homepage = () => {
           <Row>
             <Col xs={6} sm={3} md={4}>
               <h2>{weatherData.city.name}</h2>
-              <p>Current temp: {weatherData.list[0].main.temp}&deg; F</p>
+              <Temp size="xl" amount={weatherData.list[0].main.temp} />
               <p>{weatherData.list[0].weather[0].description}</p>
               <Image
                 src={`https://openweathermap.org/img/wn/${weatherData.list[0].weather[0].icon}@2x.png`}
