@@ -51,3 +51,27 @@
     }
   }
 }
+
+@mixin generateAlignItemsClasses() {
+  $values: stretch, flex-start, flex-end, center, baseline, initial, inherit;
+
+  @each $value in $values {
+    &.align-items-#{$value} {
+      align-items: $value;
+    }
+  }
+}
+
+@mixin generateColClasses() {
+  $sizes: xs, xm, md, lg, xl;
+
+  @each $size in $sizes {
+    @include breakpoint(#{$size}) {
+      @for $i from 1 through 12 {
+        &.col__#{$size}__#{$i} {
+          width: calc($i/12 * 100%);
+        }
+      }
+    }
+  }
+}

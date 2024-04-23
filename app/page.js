@@ -6,24 +6,24 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 
 // custom components
+import Button from "..//components/Button";
+import Col from "..//components/Col";
+import Container from "..//components/Container";
 import List from "../components/List";
+import Row from "..//components/Row";
 import Tabs from "../components/Tabs";
 
-import {
-  getGeoLocation,
-  getPeople,
-  getWeatherData,
-  getWeatherDataByLatLon,
-} from "../lib/api";
+import { getGeoLocation, getPeople, getWeatherDataByLatLon } from "../lib/api";
 
 const Homepage = () => {
+  const [loading, setloading] = useState(true);
   const [weatherData, setWeatherData] = useState(null);
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [daysOfWeek, setDaysOfWeek] = useState(null);
   const [activeDayIndex, setActiveDayIndex] = useState(0);
 
-  const peopleArr = getPeople();
+  //const peopleArr = getPeople();
 
   useEffect(() => {
     getGeoLocation()
@@ -38,8 +38,9 @@ const Homepage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = location ? await getWeatherDataByLatLon(location) : "";
+      const response = await getWeatherDataByLatLon(location);
       setWeatherData(response);
+      setloading(false);
     };
     location ? fetchData() : null;
   }, [location]);
@@ -47,6 +48,7 @@ const Homepage = () => {
   useEffect(() => {
     // filter out the days of the week
     const tempWeek = [];
+
     weatherData &&
       weatherData.list.filter((block) => {
         const date = new Date(block.dt * 1000);
@@ -66,37 +68,43 @@ const Homepage = () => {
   //console.log({ peopleArr });
   return (
     <div>
-      <h1>Weather app</h1>
       {errorMsg && <div>{errorMsg} </div>}
-      {weatherData && (
-        <div>
-          <h2>{weatherData.city.name}</h2>
-          <p>Current temp: {weatherData.list[0].main.temp}&deg; F</p>
-          <p>{weatherData.list[0].weather[0].description}</p>
-          <Image
-            src={`https://openweathermap.org/img/wn/${weatherData.list[0].weather[0].icon}@2x.png`}
-            alt={`Weather icon for ${weatherData.list[0].weather[0].description}}`}
-            width={100}
-            height={100}
-          />
-        </div>
-      )}
-      {/*<PeoplePicker people={peopleArr} />
-      <ButtonDemo />
-  <ColorPicker /> */}
-      {weatherData && daysOfWeek && (
-        <section>
-          <Tabs
-            activeIndex={activeDayIndex}
-            items={daysOfWeek}
-            clickHandler={setActiveDayIndex}
-          />
-          <List
-            activeIndex={activeDayIndex}
-            items={weatherData.list}
-            daysOfWeek={daysOfWeek}
-          />
-        </section>
+      {loading ? (
+        <Container>
+          <p>Loading...</p>
+        </Container>
+      ) : (
+        <Container>
+          <Row>
+            <Col xs={6} sm={3} md={4}>
+              <h2>{weatherData.city.name}</h2>
+              <p>Current temp: {weatherData.list[0].main.temp}&deg; F</p>
+              <p>{weatherData.list[0].weather[0].description}</p>
+              <Image
+                src={`https://openweathermap.org/img/wn/${weatherData.list[0].weather[0].icon}@2x.png`}
+                alt={`Weather icon for ${weatherData.list[0].weather[0].description}}`}
+                width={100}
+                height={100}
+              />
+            </Col>
+            <Col sm={9} md={8}>
+              {weatherData && daysOfWeek && (
+                <section>
+                  <Tabs
+                    activeIndex={activeDayIndex}
+                    items={daysOfWeek}
+                    clickHandler={setActiveDayIndex}
+                  />
+                  <List
+                    activeIndex={activeDayIndex}
+                    items={weatherData.list}
+                    daysOfWeek={daysOfWeek}
+                  />
+                </section>
+              )}
+            </Col>
+          </Row>
+        </Container>
       )}
     </div>
   );

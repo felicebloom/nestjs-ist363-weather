@@ -2,6 +2,9 @@
 
 .row {
   display: flex;
-  background-color: limegreen;
+  flex-wrap: wrap;
+  //background-color: limegreen;
+  //gap: 1rem;
   @include mixins.generateJustifyContentClasses();
+  @include mixins.generateAlignItemsClasses();
 }
