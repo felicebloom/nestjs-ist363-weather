@@ -20,6 +20,18 @@ const colors = [
     name: "blue",
     value: "#0000FF",
   },
+  {
+    name: "yellow",
+    value: "#FFFF00",
+  },
+  {
+    name: "teal",
+    value: "#008080",
+  },
+  {
+    name: "orange",
+    value: "#FFA500",
+  },
 ];
 
 const ColorPicker = () => {

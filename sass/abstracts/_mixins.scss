@@ -63,7 +63,7 @@
 }
 
 @mixin generateColClasses() {
-  $sizes: xs, xm, md, lg, xl;
+  $sizes: xs, sm, md, lg, xl;
 
   @each $size in $sizes {
     @include breakpoint(#{$size}) {
@@ -76,13 +76,28 @@
   }
 }
 
-@mixin generateFontSizeClasses() {
-  $sizes: xs, sm, md, lg, xl;
+@mixin generateFontSizeClasses($rootFontSize) {
+  $multipliers: (
+    xs: 0.75,
+    sm: 0.9,
+    md: 1,
+    lg: 1.5,
+    xl: 3,
+  );
+  @each $size, $multiplier in $multipliers {
+    &.font_size--#{$size} {
+      font-size: calc($rootFontSize * $multiplier);
+    }
+  }
+}
 
-  @each $size, $value in $sizes {
-    @include breakpoint(#{$size}) {
-      &.font_size--#{$size} {
-        font-size: 2rem;
+@mixin generatePaddingClasses() {
+  $sides: top, right, bottom, left;
+
+  @each $side in $sides {
+    @for $i from 1 through 6 {
+      &.padding-#{$side}-#{$i} {
+        padding-#{$side}: #{$i}rem;
       }
     }
   }

@@ -1,15 +1,19 @@
 "use client";
 
+import "../sass/base/_base.scss";
+
 // core components
 import { useState, useEffect } from "react";
 
 import Image from "next/image";
 
 // custom components
-import Col from "..//components/Col";
-import Container from "..//components/Container";
+import Button from "../components/Button";
+import Col from "../components/Col";
+import Container from "../components/Container";
 import List from "../components/List";
-import Row from "..//components/Row";
+import Row from "../components/Row";
+import Section from "../components/Section";
 import Tabs from "../components/Tabs";
 import Temp from "../components/Temp";
 
@@ -22,6 +26,7 @@ const Homepage = () => {
   const [errorMsg, setErrorMsg] = useState(null);
   const [daysOfWeek, setDaysOfWeek] = useState(null);
   const [activeDayIndex, setActiveDayIndex] = useState(0);
+  const [tempUnit, setTempUnit] = useState("imperial");
 
   //const peopleArr = getPeople();
 
@@ -67,7 +72,7 @@ const Homepage = () => {
 
   //console.log({ peopleArr });
   return (
-    <div>
+    <Section>
       {errorMsg && <div>{errorMsg} </div>}
       {loading ? (
         <Container>
@@ -76,15 +81,28 @@ const Homepage = () => {
       ) : (
         <Container>
           <Row>
-            <Col xs={6} sm={3} md={4}>
+            <Col sm={3} md={4}>
               <h2>{weatherData.city.name}</h2>
-              <Temp size="xl" amount={weatherData.list[0].main.temp} />
+              <Temp
+                size="lg"
+                amount={weatherData.list[0].main.temp}
+                unit={tempUnit}
+              />
               <p>{weatherData.list[0].weather[0].description}</p>
               <Image
                 src={`https://openweathermap.org/img/wn/${weatherData.list[0].weather[0].icon}@2x.png`}
                 alt={`Weather icon for ${weatherData.list[0].weather[0].description}}`}
                 width={100}
                 height={100}
+              />
+              <br />
+              <Button
+                label={`Change to ${
+                  tempUnit === "imperial" ? "celsius" : "fahrenheit"
+                }`}
+                clickHandler={() => {
+                  setTempUnit(tempUnit === "imperial" ? "metric" : "imperial");
+                }}
               />
             </Col>
             <Col sm={9} md={8}>
@@ -99,6 +117,7 @@ const Homepage = () => {
                     activeIndex={activeDayIndex}
                     items={weatherData.list}
                     daysOfWeek={daysOfWeek}
+                    unit={tempUnit}
                   />
                 </section>
               )}
@@ -106,7 +125,7 @@ const Homepage = () => {
           </Row>
         </Container>
       )}
-    </div>
+    </Section>
   );
 };
 export default Homepage;
